@@ -1,6 +1,7 @@
 package com.example.movie_web_be.controller;
 
 import com.example.movie_web_be.dto.request.GenreRequest;
+import com.example.movie_web_be.dto.request.PageRequest;
 import com.example.movie_web_be.dto.response.ApiResponse;
 import com.example.movie_web_be.dto.response.GenreResponse;
 import com.example.movie_web_be.dto.response.PageResponse;
@@ -86,12 +87,9 @@ public class GenreController {
 
     @GetMapping("/paged")
     @Operation(summary = "Lấy danh sách thể loại có phân trang", description = "Lấy danh sách thể loại với phân trang")
-    public ResponseEntity<ApiResponse<PageResponse<GenreResponse>>> getAllPaged(
-            @Parameter(description = "Số trang (bắt đầu từ 0)", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Số lượng mỗi trang", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(ApiResponse.success(genreService.getAllPaged(page, size)));
+    public ResponseEntity<ApiResponse<PageResponse<GenreResponse>>> getAllPaged(@ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(
+                genreService.getAllPaged(pageRequest.getPage(), pageRequest.getSize())));
     }
 
     @GetMapping("/search")
@@ -99,10 +97,8 @@ public class GenreController {
     public ResponseEntity<ApiResponse<PageResponse<GenreResponse>>> search(
             @Parameter(description = "Tên thể loại (tìm kiếm gần đúng)")
             @RequestParam(required = false) String name,
-            @Parameter(description = "Số trang", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Số lượng mỗi trang", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(ApiResponse.success(genreService.search(name, page, size)));
+            @ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(
+                genreService.search(name, pageRequest.getPage(), pageRequest.getSize())));
     }
 }

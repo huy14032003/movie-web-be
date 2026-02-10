@@ -1,6 +1,7 @@
 package com.example.movie_web_be.controller;
 
 import com.example.movie_web_be.dto.request.MovieRequest;
+import com.example.movie_web_be.dto.request.PageRequest;
 import com.example.movie_web_be.dto.response.ApiResponse;
 import com.example.movie_web_be.dto.response.MovieResponse;
 import com.example.movie_web_be.dto.response.PageResponse;
@@ -92,16 +93,10 @@ public class MovieController {
 
     @GetMapping
     @Operation(summary = "Lấy danh sách phim", description = "Lấy danh sách phim với phân trang và sắp xếp")
-    public ResponseEntity<ApiResponse<PageResponse<MovieResponse>>> getAll(
-            @Parameter(description = "Số trang (bắt đầu từ 0)", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Số lượng phim mỗi trang", example = "10")
-            @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Sắp xếp theo trường", example = "createdAt")
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @Parameter(description = "Hướng sắp xếp (asc/desc)", example = "desc")
-            @RequestParam(defaultValue = "desc") String sortDir) {
-        return ResponseEntity.ok(ApiResponse.success(movieService.getAll(page, size, sortBy, sortDir)));
+    public ResponseEntity<ApiResponse<PageResponse<MovieResponse>>> getAll(@ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(
+                movieService.getAll(pageRequest.getPage(), pageRequest.getSize(),
+                        pageRequest.getSortBy(), pageRequest.getSortDir())));
     }
 
     @GetMapping("/search")
@@ -113,21 +108,16 @@ public class MovieController {
             @RequestParam(required = false) Integer year,
             @Parameter(description = "Tên đạo diễn (tìm kiếm gần đúng)")
             @RequestParam(required = false) String director,
-            @Parameter(description = "Số trang", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Số lượng mỗi trang", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(ApiResponse.success(movieService.search(title, year, director, page, size)));
+            @ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(
+                movieService.search(title, year, director, pageRequest.getPage(), pageRequest.getSize())));
     }
 
     @GetMapping("/featured")
     @Operation(summary = "Lấy phim nổi bật", description = "Lấy danh sách phim được đánh dấu là nổi bật")
-    public ResponseEntity<ApiResponse<PageResponse<MovieResponse>>> getFeatured(
-            @Parameter(description = "Số trang", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Số lượng mỗi trang", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(ApiResponse.success(movieService.getFeatured(page, size)));
+    public ResponseEntity<ApiResponse<PageResponse<MovieResponse>>> getFeatured(@ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(
+                movieService.getFeatured(pageRequest.getPage(), pageRequest.getSize())));
     }
 
     @GetMapping("/genre/{genreId}")
@@ -135,11 +125,9 @@ public class MovieController {
     public ResponseEntity<ApiResponse<PageResponse<MovieResponse>>> getByGenre(
             @Parameter(description = "ID thể loại", required = true)
             @PathVariable Integer genreId,
-            @Parameter(description = "Số trang", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Số lượng mỗi trang", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(ApiResponse.success(movieService.getByGenre(genreId, page, size)));
+            @ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(
+                movieService.getByGenre(genreId, pageRequest.getPage(), pageRequest.getSize())));
     }
 
     @GetMapping("/actor/{actorId}")
@@ -147,10 +135,8 @@ public class MovieController {
     public ResponseEntity<ApiResponse<PageResponse<MovieResponse>>> getByActor(
             @Parameter(description = "ID diễn viên", required = true)
             @PathVariable Integer actorId,
-            @Parameter(description = "Số trang", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Số lượng mỗi trang", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(ApiResponse.success(movieService.getByActor(actorId, page, size)));
+            @ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(
+                movieService.getByActor(actorId, pageRequest.getPage(), pageRequest.getSize())));
     }
 }
