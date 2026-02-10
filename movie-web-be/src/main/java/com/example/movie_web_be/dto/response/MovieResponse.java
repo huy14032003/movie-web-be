@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -50,6 +51,12 @@ public class MovieResponse {
     @Schema(description = "Phim nổi bật", example = "true")
     private Boolean featured;
 
+    @Schema(description = "Là phim bộ", example = "true")
+    private Boolean isSeries;
+
+    @Schema(description = "Tổng số tập", example = "24")
+    private Integer totalEpisodes;
+
     @Schema(description = "Slug SEO", example = "avengers-endgame")
     private String slug;
 
@@ -61,4 +68,7 @@ public class MovieResponse {
 
     @Schema(description = "Danh sách diễn viên")
     private Set<ActorResponse> actors;
+
+    @Schema(description = "Danh sách các tập phim")
+    private List<EpisodeResponse> episodes;
 }

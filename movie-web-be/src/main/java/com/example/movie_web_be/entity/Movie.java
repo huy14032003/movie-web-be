@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,6 +50,14 @@ public class Movie {
     @Builder.Default
     private Boolean featured = false;
 
+    @Column(name = "is_series")
+    @Builder.Default
+    private Boolean isSeries = false;
+
+    @Column(name = "total_episodes")
+    @Builder.Default
+    private Integer totalEpisodes = 1;
+
     @Column(unique = true)
     private String slug;
 
@@ -55,22 +65,18 @@ public class Movie {
     private LocalDateTime createdAt;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "movie_genres",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id")
-    )
+    @JoinTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
     @Builder.Default
     private Set<Genre> genres = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "movie_cast",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "actor_id")
-    )
+    @JoinTable(name = "movie_cast", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
     @Builder.Default
     private Set<Actor> actors = new HashSet<>();
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Episode> episodes = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

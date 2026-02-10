@@ -58,6 +58,13 @@ public class MovieRequest {
     @Schema(description = "Phim nổi bật", example = "true")
     private Boolean featured;
 
+    @Schema(description = "Là phim bộ", example = "true")
+    private Boolean isSeries;
+
+    @Min(value = 1, message = "Tổng số tập phải từ 1 trở lên")
+    @Schema(description = "Tổng số tập (dự kiến)", example = "24")
+    private Integer totalEpisodes;
+
     @Size(max = 255, message = "Slug không được vượt quá 255 ký tự")
     @Schema(description = "Slug cho SEO", example = "avengers-endgame")
     private String slug;

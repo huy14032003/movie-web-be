@@ -2,6 +2,7 @@ package com.example.movie_web_be.service.impl;
 
 import com.example.movie_web_be.dto.request.MovieRequest;
 import com.example.movie_web_be.dto.response.ActorResponse;
+import com.example.movie_web_be.dto.response.EpisodeResponse;
 import com.example.movie_web_be.dto.response.GenreResponse;
 import com.example.movie_web_be.dto.response.MovieResponse;
 import com.example.movie_web_be.dto.response.PageResponse;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,6 +54,8 @@ public class MovieServiceImpl implements MovieService {
                 .director(request.getDirector())
                 .trailer(request.getTrailer())
                 .featured(request.getFeatured() != null ? request.getFeatured() : false)
+                .isSeries(request.getIsSeries() != null ? request.getIsSeries() : false)
+                .totalEpisodes(request.getTotalEpisodes() != null ? request.getTotalEpisodes() : 1)
                 .slug(request.getSlug())
                 .genres(getGenresByIds(request.getGenreIds()))
                 .actors(getActorsByIds(request.getActorIds()))
@@ -80,6 +84,8 @@ public class MovieServiceImpl implements MovieService {
         movie.setDirector(request.getDirector());
         movie.setTrailer(request.getTrailer());
         movie.setFeatured(request.getFeatured());
+        movie.setIsSeries(request.getIsSeries());
+        movie.setTotalEpisodes(request.getTotalEpisodes());
         movie.setSlug(request.getSlug());
         movie.setGenres(getGenresByIds(request.getGenreIds()));
         movie.setActors(getActorsByIds(request.getActorIds()));
@@ -181,6 +187,8 @@ public class MovieServiceImpl implements MovieService {
                 .director(movie.getDirector())
                 .trailer(movie.getTrailer())
                 .featured(movie.getFeatured())
+                .isSeries(movie.getIsSeries())
+                .totalEpisodes(movie.getTotalEpisodes())
                 .slug(movie.getSlug())
                 .createdAt(movie.getCreatedAt())
                 .genres(movie.getGenres().stream()
@@ -189,6 +197,18 @@ public class MovieServiceImpl implements MovieService {
                 .actors(movie.getActors().stream()
                         .map(a -> ActorResponse.builder().id(a.getId()).name(a.getName()).build())
                         .collect(Collectors.toSet()))
+                .episodes(movie.getEpisodes().stream()
+                        .map(e -> EpisodeResponse.builder()
+                                .id(e.getId())
+                                .movieId(movie.getId())
+                                .title(e.getTitle())
+                                .episodeNumber(e.getEpisodeNumber())
+                                .videoUrl(e.getVideoUrl())
+                                .serverName(e.getServerName())
+                                .quality(e.getQuality())
+                                .createdAt(e.getCreatedAt())
+                                .build())
+                        .collect(Collectors.toList()))
                 .build();
     }
 
