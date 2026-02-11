@@ -26,7 +26,8 @@ public class CorsConfig {
                 "http://127.0.0.1:5173",
                 "https://*.vercel.app",  // Cho phép tất cả subdomain Vercel
                 // Thêm domain production cụ thể của bạn vào đây
-                "https://your-app.vercel.app"  // Thay bằng domain Vercel thực tế của bạn
+                "https://your-app.vercel.app",  // Thay bằng domain Vercel thực tế của bạn
+                "https://pub-*.r2.dev"
         ));
         corsConfiguration.setAllowedHeaders(Arrays.asList(
                 "Origin",
