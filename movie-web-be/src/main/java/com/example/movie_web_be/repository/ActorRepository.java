@@ -20,4 +20,7 @@ public interface ActorRepository extends JpaRepository<Actor, Integer> {
     @Query("SELECT a FROM Actor a WHERE " +
             "(:name IS NULL OR LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%')))")
     Page<Actor> search(@Param("name") String name, Pageable pageable);
+
+    @Query("SELECT DISTINCT a FROM Actor a JOIN a.movies m JOIN m.countries c WHERE c.id = :countryId")
+    Page<Actor> findByCountryId(@Param("countryId") Integer countryId, Pageable pageable);
 }

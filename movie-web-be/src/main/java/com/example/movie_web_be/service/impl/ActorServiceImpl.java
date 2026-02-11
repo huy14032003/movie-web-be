@@ -91,6 +91,14 @@ public class ActorServiceImpl implements ActorService {
         return toPageResponse(actorPage);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<ActorResponse> getByCountry(Integer countryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Actor> actorPage = actorRepository.findByCountryId(countryId, pageable);
+        return toPageResponse(actorPage);
+    }
+
     private ActorResponse toResponse(Actor actor) {
         return ActorResponse.builder()
                 .id(actor.getId())

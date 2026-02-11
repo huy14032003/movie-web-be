@@ -1,17 +1,15 @@
 package com.example.movie_web_be.service.impl;
 
 import com.example.movie_web_be.dto.request.MovieRequest;
-import com.example.movie_web_be.dto.response.ActorResponse;
-import com.example.movie_web_be.dto.response.EpisodeResponse;
-import com.example.movie_web_be.dto.response.GenreResponse;
-import com.example.movie_web_be.dto.response.MovieResponse;
-import com.example.movie_web_be.dto.response.PageResponse;
+import com.example.movie_web_be.dto.response.*;
 import com.example.movie_web_be.entity.Actor;
+import com.example.movie_web_be.entity.Country;
 import com.example.movie_web_be.entity.Genre;
 import com.example.movie_web_be.entity.Movie;
 import com.example.movie_web_be.exception.DuplicateResourceException;
 import com.example.movie_web_be.exception.ResourceNotFoundException;
 import com.example.movie_web_be.repository.ActorRepository;
+import com.example.movie_web_be.repository.CountryRepository;
 import com.example.movie_web_be.repository.GenreRepository;
 import com.example.movie_web_be.repository.MovieRepository;
 import com.example.movie_web_be.service.MovieService;
@@ -36,6 +34,7 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final GenreRepository genreRepository;
     private final ActorRepository actorRepository;
+    private final CountryRepository countryRepository;
 
     @Override
     public MovieResponse create(MovieRequest request) {
@@ -59,6 +58,7 @@ public class MovieServiceImpl implements MovieService {
                 .slug(request.getSlug())
                 .genres(getGenresByIds(request.getGenreIds()))
                 .actors(getActorsByIds(request.getActorIds()))
+                .countries(getCountriesByIds(request.getCountryIds()))
                 .build();
 
         return toResponse(movieRepository.save(movie));
@@ -89,6 +89,7 @@ public class MovieServiceImpl implements MovieService {
         movie.setSlug(request.getSlug());
         movie.setGenres(getGenresByIds(request.getGenreIds()));
         movie.setActors(getActorsByIds(request.getActorIds()));
+        movie.setCountries(getCountriesByIds(request.getCountryIds()));
 
         return toResponse(movieRepository.save(movie));
     }
@@ -160,6 +161,14 @@ public class MovieServiceImpl implements MovieService {
         return toPageResponse(moviePage);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<MovieResponse> getByCountry(Integer countryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Movie> moviePage = movieRepository.findByCountryId(countryId, pageable);
+        return toPageResponse(moviePage);
+    }
+
     private Set<Genre> getGenresByIds(Set<Integer> genreIds) {
         if (genreIds == null || genreIds.isEmpty()) {
             return new HashSet<>();
@@ -172,6 +181,13 @@ public class MovieServiceImpl implements MovieService {
             return new HashSet<>();
         }
         return new HashSet<>(actorRepository.findAllById(actorIds));
+    }
+
+    private Set<Country> getCountriesByIds(Set<Integer> countryIds) {
+        if (countryIds == null || countryIds.isEmpty()) {
+            return new HashSet<>();
+        }
+        return new HashSet<>(countryRepository.findAllById(countryIds));
     }
 
     private MovieResponse toResponse(Movie movie) {
@@ -192,10 +208,13 @@ public class MovieServiceImpl implements MovieService {
                 .slug(movie.getSlug())
                 .createdAt(movie.getCreatedAt())
                 .genres(movie.getGenres().stream()
-                        .map(g -> GenreResponse.builder().id(g.getId()).name(g.getName()).build())
+                        .map(g -> GenreResponse.builder().id(g.getId()).name(g.getName()).slug(g.getSlug()).build())
                         .collect(Collectors.toSet()))
                 .actors(movie.getActors().stream()
                         .map(a -> ActorResponse.builder().id(a.getId()).name(a.getName()).build())
+                        .collect(Collectors.toSet()))
+                .countries(movie.getCountries().stream()
+                        .map(c -> CountryResponse.builder().id(c.getId()).name(c.getName()).slug(c.getSlug()).build())
                         .collect(Collectors.toSet()))
                 .episodes(movie.getEpisodes().stream()
                         .map(e -> EpisodeResponse.builder()

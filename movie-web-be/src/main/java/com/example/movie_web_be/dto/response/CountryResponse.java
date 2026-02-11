@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Thông tin thể loại")
-public class GenreResponse {
+@Schema(description = "Thông tin quốc gia")
+public class CountryResponse {
 
-    @Schema(description = "ID thể loại", example = "1")
+    @Schema(description = "ID quốc gia", example = "1")
     private Integer id;
 
-    @Schema(description = "Tên thể loại", example = "Action")
+    @Schema(description = "Tên quốc gia", example = "Việt Nam")
     private String name;
 
-    @Schema(description = "Slug", example = "action")
+    @Schema(description = "Slug", example = "viet-nam")
     private String slug;
 }

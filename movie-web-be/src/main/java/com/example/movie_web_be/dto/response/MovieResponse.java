@@ -69,6 +69,9 @@ public class MovieResponse {
     @Schema(description = "Danh sách diễn viên")
     private Set<ActorResponse> actors;
 
+    @Schema(description = "Danh sách quốc gia")
+    private Set<CountryResponse> countries;
+
     @Schema(description = "Danh sách các tập phim")
     private List<EpisodeResponse> episodes;
 }

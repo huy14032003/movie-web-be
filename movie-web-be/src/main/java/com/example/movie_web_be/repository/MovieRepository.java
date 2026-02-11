@@ -34,5 +34,8 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     @Query("SELECT DISTINCT m FROM Movie m JOIN m.actors a WHERE a.id = :actorId")
     Page<Movie> findByActorId(@Param("actorId") Integer actorId, Pageable pageable);
 
+    @Query("SELECT DISTINCT m FROM Movie m JOIN m.countries c WHERE c.id = :countryId")
+    Page<Movie> findByCountryId(@Param("countryId") Integer countryId, Pageable pageable);
+
     boolean existsBySlug(String slug);
 }

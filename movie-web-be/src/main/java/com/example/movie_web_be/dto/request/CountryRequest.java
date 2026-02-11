@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Request body để tạo/cập nhật thể loại")
-public class GenreRequest {
+@Schema(description = "Request body để tạo/cập nhật quốc gia")
+public class CountryRequest {
 
-    @NotBlank(message = "Tên thể loại không được để trống")
-    @Size(max = 100, message = "Tên thể loại không được vượt quá 100 ký tự")
-    @Schema(description = "Tên thể loại", example = "Action")
+    @NotBlank(message = "Tên quốc gia không được để trống")
+    @Size(max = 100, message = "Tên quốc gia không được vượt quá 100 ký tự")
+    @Schema(description = "Tên quốc gia", example = "Việt Nam")
     private String name;
 
     @Size(max = 100, message = "Slug không được vượt quá 100 ký tự")
-    @Schema(description = "Slug cho SEO", example = "action")
+    @Schema(description = "Slug cho SEO", example = "viet-nam")
     private String slug;
 }

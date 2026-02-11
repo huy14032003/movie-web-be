@@ -21,4 +21,6 @@ public interface ActorService {
     PageResponse<ActorResponse> getAllPaged(int page, int size);
 
     PageResponse<ActorResponse> search(String name, int page, int size);
+
+    PageResponse<ActorResponse> getByCountry(Integer countryId, int page, int size);
 }

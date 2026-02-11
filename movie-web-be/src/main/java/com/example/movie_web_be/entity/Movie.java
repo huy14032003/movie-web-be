@@ -74,6 +74,11 @@ public class Movie {
     @Builder.Default
     private Set<Actor> actors = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "movie_countries", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "country_id"))
+    @Builder.Default
+    private Set<Country> countries = new HashSet<>();
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Episode> episodes = new ArrayList<>();

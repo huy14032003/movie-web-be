@@ -139,4 +139,14 @@ public class MovieController {
         return ResponseEntity.ok(ApiResponse.success(
                 movieService.getByActor(actorId, pageRequest.getPage(), pageRequest.getSize())));
     }
+
+    @GetMapping("/country/{countryId}")
+    @Operation(summary = "Lấy phim theo quốc gia", description = "Lấy danh sách phim thuộc một quốc gia cụ thể")
+    public ResponseEntity<ApiResponse<PageResponse<MovieResponse>>> getByCountry(
+            @Parameter(description = "ID quốc gia", required = true)
+            @PathVariable Integer countryId,
+            @ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(
+                movieService.getByCountry(countryId, pageRequest.getPage(), pageRequest.getSize())));
+    }
 }

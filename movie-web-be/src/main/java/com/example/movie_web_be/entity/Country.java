@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "genres")
+@Table(name = "countries")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Genre {
+public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Genre {
     @Column(unique = true, length = 100)
     private String slug;
 
-    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "countries", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Movie> movies = new HashSet<>();
 }

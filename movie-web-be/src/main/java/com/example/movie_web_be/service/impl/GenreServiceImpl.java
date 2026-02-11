@@ -33,6 +33,7 @@ public class GenreServiceImpl implements GenreService {
 
         Genre genre = Genre.builder()
                 .name(request.getName())
+                .slug(request.getSlug())
                 .build();
 
         return toResponse(genreRepository.save(genre));
@@ -48,6 +49,7 @@ public class GenreServiceImpl implements GenreService {
         }
 
         genre.setName(request.getName());
+        genre.setSlug(request.getSlug());
         return toResponse(genreRepository.save(genre));
     }
 
@@ -95,6 +97,7 @@ public class GenreServiceImpl implements GenreService {
         return GenreResponse.builder()
                 .id(genre.getId())
                 .name(genre.getName())
+                .slug(genre.getSlug())
                 .build();
     }
 
