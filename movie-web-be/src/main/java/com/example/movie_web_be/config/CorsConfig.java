@@ -16,11 +16,17 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(List.of(
+        
+        // Sử dụng setAllowedOriginPatterns thay vì setAllowedOrigins
+        // để hỗ trợ wildcard và nhiều domain
+        corsConfiguration.setAllowedOriginPatterns(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:5173",
                 "http://127.0.0.1:3000",
-                "http://127.0.0.1:5173"
+                "http://127.0.0.1:5173",
+                "https://*.vercel.app",  // Cho phép tất cả subdomain Vercel
+                // Thêm domain production cụ thể của bạn vào đây
+                "https://your-app.vercel.app"  // Thay bằng domain Vercel thực tế của bạn
         ));
         corsConfiguration.setAllowedHeaders(Arrays.asList(
                 "Origin",
