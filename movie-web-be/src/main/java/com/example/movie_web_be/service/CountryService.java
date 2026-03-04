@@ -16,9 +16,9 @@ public interface CountryService {
 
     CountryResponse getById(Integer id);
 
-    List<CountryResponse> getAll();
+    PageResponse<CountryResponse> getAll(int page, int size);
 
-    PageResponse<CountryResponse> getAllPaged(int page, int size);
+//    PageResponse<CountryResponse> getAllPaged(int page, int size);
 
     PageResponse<CountryResponse> search(String name, int page, int size);
 }

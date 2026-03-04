@@ -71,19 +71,19 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CountryResponse> getAll() {
-        return countryRepository.findAll().stream()
-                .map(this::toResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PageResponse<CountryResponse> getAllPaged(int page, int size) {
+    public PageResponse<CountryResponse> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Country> countryPage = countryRepository.findAll(pageable);
         return toPageResponse(countryPage);
     }
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public PageResponse<CountryResponse> getAllPaged(int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<Country> countryPage = countryRepository.findAll(pageable);
+//        return toPageResponse(countryPage);
+//    }
 
     @Override
     @Transactional(readOnly = true)

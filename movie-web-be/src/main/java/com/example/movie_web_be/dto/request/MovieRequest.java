@@ -77,4 +77,7 @@ public class MovieRequest {
 
     @Schema(description = "Danh sách ID quốc gia", example = "[1, 2]")
     private Set<Integer> countryIds;
+
+    @Schema(description = "Danh sách ID danh mục (Phim lẻ, Phim bộ...)", example = "[1, 2]")
+    private Set<Integer> categoryIds;
 }

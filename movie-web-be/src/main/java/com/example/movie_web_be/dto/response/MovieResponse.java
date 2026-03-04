@@ -63,6 +63,9 @@ public class MovieResponse {
     @Schema(description = "Ngày tạo")
     private LocalDateTime createdAt;
 
+    @Schema(description = "Ngày cập nhật")
+    private LocalDateTime updatedAt;
+
     @Schema(description = "Danh sách thể loại")
     private Set<GenreResponse> genres;
 
@@ -71,6 +74,9 @@ public class MovieResponse {
 
     @Schema(description = "Danh sách quốc gia")
     private Set<CountryResponse> countries;
+
+    @Schema(description = "Danh mục phim (Phim lẻ, Phim bộ, Anime...)")
+    private Set<CategoryResponse> categories;
 
     @Schema(description = "Danh sách các tập phim")
     private List<EpisodeResponse> episodes;

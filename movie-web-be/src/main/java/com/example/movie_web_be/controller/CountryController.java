@@ -80,17 +80,17 @@ public class CountryController {
     }
 
     @GetMapping
-    @Operation(summary = "Lấy tất cả quốc gia", description = "Lấy danh sách tất cả quốc gia (không phân trang)")
-    public ResponseEntity<ApiResponse<List<CountryResponse>>> getAll() {
-        return ResponseEntity.ok(ApiResponse.success(countryService.getAll()));
+    @Operation(summary = "Lấy tất cả quốc gia", description = "Lấy danh sách tất cả quốc gia")
+    public ResponseEntity<ApiResponse<PageResponse<CountryResponse>>> getAll(@ModelAttribute PageRequest pageRequest) {
+        return ResponseEntity.ok(ApiResponse.success(countryService.getAll(pageRequest.getPage(), pageRequest.getSize())));
     }
 
-    @GetMapping("/paged")
-    @Operation(summary = "Lấy danh sách quốc gia có phân trang", description = "Lấy danh sách quốc gia với phân trang")
-    public ResponseEntity<ApiResponse<PageResponse<CountryResponse>>> getAllPaged(@ModelAttribute PageRequest pageRequest) {
-        return ResponseEntity.ok(ApiResponse.success(
-                countryService.getAllPaged(pageRequest.getPage(), pageRequest.getSize())));
-    }
+//    @GetMapping("/paged")
+//    @Operation(summary = "Lấy danh sách quốc gia có phân trang", description = "Lấy danh sách quốc gia với phân trang")
+//    public ResponseEntity<ApiResponse<PageResponse<CountryResponse>>> getAllPaged(@ModelAttribute PageRequest pageRequest) {
+//        return ResponseEntity.ok(ApiResponse.success(
+//                countryService.getAllPaged(pageRequest.getPage(), pageRequest.getSize())));
+//    }
 
     @GetMapping("/search")
     @Operation(summary = "Tìm kiếm quốc gia", description = "Tìm kiếm quốc gia theo tên với phân trang")

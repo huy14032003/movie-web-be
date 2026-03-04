@@ -13,29 +13,31 @@ import java.util.Optional;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
-    Optional<Movie> findBySlug(String slug);
+        Optional<Movie> findBySlug(String slug);
 
-    Page<Movie> findByFeaturedTrue(Pageable pageable);
+        Page<Movie> findByFeaturedTrue(Pageable pageable);
 
-    @Query("SELECT m FROM Movie m WHERE " +
-            "(:title IS NULL OR LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
-            "(:year IS NULL OR m.year = :year) AND " +
-            "(:director IS NULL OR LOWER(m.director) LIKE LOWER(CONCAT('%', :director, '%')))")
-    Page<Movie> search(
-            @Param("title") String title,
-            @Param("year") Integer year,
-            @Param("director") String director,
-            Pageable pageable
-    );
+        @Query("SELECT m FROM Movie m WHERE " +
+                        "(:title IS NULL OR LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
+                        "(:year IS NULL OR m.year = :year) AND " +
+                        "(:director IS NULL OR LOWER(m.director) LIKE LOWER(CONCAT('%', :director, '%')))")
+        Page<Movie> search(
+                        @Param("title") String title,
+                        @Param("year") Integer year,
+                        @Param("director") String director,
+                        Pageable pageable);
 
-    @Query("SELECT DISTINCT m FROM Movie m JOIN m.genres g WHERE g.id = :genreId")
-    Page<Movie> findByGenreId(@Param("genreId") Integer genreId, Pageable pageable);
+        @Query("SELECT DISTINCT m FROM Movie m JOIN m.genres g WHERE g.id = :genreId")
+        Page<Movie> findByGenreId(@Param("genreId") Integer genreId, Pageable pageable);
 
-    @Query("SELECT DISTINCT m FROM Movie m JOIN m.actors a WHERE a.id = :actorId")
-    Page<Movie> findByActorId(@Param("actorId") Integer actorId, Pageable pageable);
+        @Query("SELECT DISTINCT m FROM Movie m JOIN m.actors a WHERE a.id = :actorId")
+        Page<Movie> findByActorId(@Param("actorId") Integer actorId, Pageable pageable);
 
-    @Query("SELECT DISTINCT m FROM Movie m JOIN m.countries c WHERE c.id = :countryId")
-    Page<Movie> findByCountryId(@Param("countryId") Integer countryId, Pageable pageable);
+        @Query("SELECT DISTINCT m FROM Movie m JOIN m.countries c WHERE c.id = :countryId")
+        Page<Movie> findByCountryId(@Param("countryId") Integer countryId, Pageable pageable);
 
-    boolean existsBySlug(String slug);
+        @Query("SELECT DISTINCT m FROM Movie m JOIN m.categories cat WHERE cat.id = :categoryId")
+        Page<Movie> findByCategoryId(@Param("categoryId") Integer categoryId, Pageable pageable);
+
+        boolean existsBySlug(String slug);
 }

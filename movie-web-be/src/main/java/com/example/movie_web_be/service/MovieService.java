@@ -27,4 +27,6 @@ public interface MovieService {
     PageResponse<MovieResponse> getByActor(Integer actorId, int page, int size);
 
     PageResponse<MovieResponse> getByCountry(Integer countryId, int page, int size);
+
+    PageResponse<MovieResponse> getByCategory(Integer categoryId, int page, int size);
 }

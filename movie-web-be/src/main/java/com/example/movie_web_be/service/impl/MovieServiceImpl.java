@@ -3,12 +3,14 @@ package com.example.movie_web_be.service.impl;
 import com.example.movie_web_be.dto.request.MovieRequest;
 import com.example.movie_web_be.dto.response.*;
 import com.example.movie_web_be.entity.Actor;
+import com.example.movie_web_be.entity.Category;
 import com.example.movie_web_be.entity.Country;
 import com.example.movie_web_be.entity.Genre;
 import com.example.movie_web_be.entity.Movie;
 import com.example.movie_web_be.exception.DuplicateResourceException;
 import com.example.movie_web_be.exception.ResourceNotFoundException;
 import com.example.movie_web_be.repository.ActorRepository;
+import com.example.movie_web_be.repository.CategoryRepository;
 import com.example.movie_web_be.repository.CountryRepository;
 import com.example.movie_web_be.repository.GenreRepository;
 import com.example.movie_web_be.repository.MovieRepository;
@@ -35,6 +37,7 @@ public class MovieServiceImpl implements MovieService {
     private final GenreRepository genreRepository;
     private final ActorRepository actorRepository;
     private final CountryRepository countryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public MovieResponse create(MovieRequest request) {
@@ -59,6 +62,7 @@ public class MovieServiceImpl implements MovieService {
                 .genres(getGenresByIds(request.getGenreIds()))
                 .actors(getActorsByIds(request.getActorIds()))
                 .countries(getCountriesByIds(request.getCountryIds()))
+                .categories(getCategoriesByIds(request.getCategoryIds()))
                 .build();
 
         return toResponse(movieRepository.save(movie));
@@ -90,6 +94,7 @@ public class MovieServiceImpl implements MovieService {
         movie.setGenres(getGenresByIds(request.getGenreIds()));
         movie.setActors(getActorsByIds(request.getActorIds()));
         movie.setCountries(getCountriesByIds(request.getCountryIds()));
+        movie.setCategories(getCategoriesByIds(request.getCategoryIds()));
 
         return toResponse(movieRepository.save(movie));
     }
@@ -169,6 +174,14 @@ public class MovieServiceImpl implements MovieService {
         return toPageResponse(moviePage);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<MovieResponse> getByCategory(Integer categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Movie> moviePage = movieRepository.findByCategoryId(categoryId, pageable);
+        return toPageResponse(moviePage);
+    }
+
     private Set<Genre> getGenresByIds(Set<Integer> genreIds) {
         if (genreIds == null || genreIds.isEmpty()) {
             return new HashSet<>();
@@ -190,6 +203,13 @@ public class MovieServiceImpl implements MovieService {
         return new HashSet<>(countryRepository.findAllById(countryIds));
     }
 
+    private Set<Category> getCategoriesByIds(Set<Integer> categoryIds) {
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return new HashSet<>();
+        }
+        return new HashSet<>(categoryRepository.findAllById(categoryIds));
+    }
+
     private MovieResponse toResponse(Movie movie) {
         return MovieResponse.builder()
                 .id(movie.getId())
@@ -207,6 +227,7 @@ public class MovieServiceImpl implements MovieService {
                 .totalEpisodes(movie.getTotalEpisodes())
                 .slug(movie.getSlug())
                 .createdAt(movie.getCreatedAt())
+                .updatedAt(movie.getUpdatedAt())
                 .genres(movie.getGenres().stream()
                         .map(g -> GenreResponse.builder().id(g.getId()).name(g.getName()).slug(g.getSlug()).build())
                         .collect(Collectors.toSet()))
@@ -215,6 +236,10 @@ public class MovieServiceImpl implements MovieService {
                         .collect(Collectors.toSet()))
                 .countries(movie.getCountries().stream()
                         .map(c -> CountryResponse.builder().id(c.getId()).name(c.getName()).slug(c.getSlug()).build())
+                        .collect(Collectors.toSet()))
+                .categories(movie.getCategories().stream()
+                        .map(cat -> CategoryResponse.builder().id(cat.getId()).name(cat.getName()).slug(cat.getSlug())
+                                .build())
                         .collect(Collectors.toSet()))
                 .episodes(movie.getEpisodes().stream()
                         .map(e -> EpisodeResponse.builder()
