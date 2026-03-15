@@ -3,7 +3,7 @@ name: Wake Up Render Server
 on:
   schedule:
     # Chạy mỗi 10 phút (Theo chuẩn Cron)
-    - cron: '*/10 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch: # Cho phép bạn bấm nút chạy thủ công để test
 
 jobs:
@@ -12,5 +12,5 @@ jobs:
     steps:
       - name: Send HTTP Request
         run: |
-          curl -I ${{ secrets.RENDER_URL }}
-          echo "Ping sent at $(date)"
+          URL="${{ secrets.RENDER_URL }}?t=$(date +%s)"
+          curl -s $URL
