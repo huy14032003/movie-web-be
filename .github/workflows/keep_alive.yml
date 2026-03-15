@@ -12,5 +12,5 @@ jobs:
     steps:
       - name: Send HTTP Request
         run: |
-          curl -I https://movie-web-be-8cgg.onrender.com/healthcheck
+          curl -I ${{ secrets.RENDER_URL }}
           echo "Ping sent at $(date)"
