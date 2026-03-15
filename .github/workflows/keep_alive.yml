@@ -1,0 +1,16 @@
+name: Wake Up Render Server
+
+on:
+  schedule:
+    # Chạy mỗi 10 phút (Theo chuẩn Cron)
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Cho phép bạn bấm nút chạy thủ công để test
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP Request
+        run: |
+          curl -I https://movie-web-be-8cgg.onrender.com/healthcheck
+          echo "Ping sent at $(date)"
